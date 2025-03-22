@@ -1,16 +1,14 @@
-
 import React, { useState } from "react";
 import { X, Link as LinkIcon, ThumbsUp, MessageSquare, Share } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ProductCard from "./ProductCard";
 
 export interface ProductDetailProps {
   id: string;
   name: string;
   tagline: string;
-  description: string;
+  description?: string;
   image: string;
   upvotes: number;
   comments: number;
@@ -32,7 +30,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   id,
   name,
   tagline,
-  description,
+  description = "",
   image,
   upvotes,
   comments,

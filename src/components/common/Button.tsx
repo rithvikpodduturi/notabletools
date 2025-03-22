@@ -1,8 +1,9 @@
 
 import { cn } from "@/lib/utils";
 import React from "react";
+import { Slot } from "@radix-ui/react-slot";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "outline";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "outline" | "destructive";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -12,6 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   iconPosition?: "left" | "right";
   loading?: boolean;
   fullWidth?: boolean;
+  asChild?: boolean;
   children: React.ReactNode;
 }
 
@@ -24,6 +26,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       iconPosition = "left",
       loading = false,
       fullWidth = false,
+      asChild = false,
       className,
       children,
       disabled,
@@ -39,6 +42,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ghost: "bg-transparent text-foreground hover:bg-muted",
       outline:
         "bg-transparent border border-muted-foreground/20 hover:border-muted-foreground/30 text-foreground hover:bg-muted/5",
+      destructive:
+        "bg-destructive text-destructive-foreground hover:bg-destructive/90",
     };
 
     const sizeStyles = {
@@ -47,8 +52,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       lg: "px-5 py-2.5 text-lg rounded-md",
     };
 
+    const Comp = asChild ? Slot : "button";
+
     return (
-      <button
+      <Comp
         ref={ref}
         disabled={loading || disabled}
         className={cn(
@@ -93,7 +100,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             <span className="ml-2 inline-flex">{icon}</span>
           )}
         </span>
-      </button>
+      </Comp>
     );
   }
 );
