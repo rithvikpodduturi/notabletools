@@ -1,13 +1,32 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Search, ChevronDown } from "lucide-react";
+import { Menu, X, Search, ChevronDown, Settings, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "./common/Button";
+import { NotificationBell } from "./user/NotificationCenter";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+// Simulated auth state - replace with real auth state management
+const simulatedUser = {
+  isLoggedIn: false, // Change to true to test logged in state
+  name: "Sarah Johnson",
+  username: "sarahj",
+  avatar: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&q=80&w=200&h=200",
+};
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isLoggedIn } = simulatedUser;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,16 +71,62 @@ const Header = () => {
           </nav>
 
           {/* Desktop Right Section */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-2">
             <button className="p-2 hover:bg-muted rounded-full transition-colors">
               <Search className="h-5 w-5 text-muted-foreground" />
             </button>
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
-            <Button variant="primary" size="sm">
-              Sign Up
-            </Button>
+            
+            {isLoggedIn ? (
+              <>
+                <NotificationBell />
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange">
+                      <Avatar className="h-9 w-9">
+                        <AvatarImage src={simulatedUser.avatar} alt={simulatedUser.name} />
+                        <AvatarFallback>{simulatedUser.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col">
+                        <span>{simulatedUser.name}</span>
+                        <span className="text-muted-foreground text-xs">@{simulatedUser.username}</span>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
+                        <User className="h-4 w-4" />
+                        <span>Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings" className="flex items-center gap-2 cursor-pointer">
+                        <Settings className="h-4 w-4" />
+                        <span>Settings</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive">
+                      <LogOut className="h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/login">Sign In</Link>
+                </Button>
+                <Button variant="primary" size="sm" asChild>
+                  <Link to="/login?signup=true">Sign Up</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -96,12 +161,49 @@ const Header = () => {
             <MobileNavLink to="/topics" label="Topics" onClick={toggleMenu} />
           </nav>
           <div className="flex flex-col space-y-3 mt-auto">
-            <Button variant="outline" fullWidth>
-              Sign In
-            </Button>
-            <Button variant="primary" fullWidth>
-              Sign Up
-            </Button>
+            {isLoggedIn ? (
+              <>
+                <div className="flex items-center gap-3 py-4">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={simulatedUser.avatar} alt={simulatedUser.name} />
+                    <AvatarFallback>{simulatedUser.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div className="font-medium">{simulatedUser.name}</div>
+                    <div className="text-sm text-muted-foreground">@{simulatedUser.username}</div>
+                  </div>
+                </div>
+                <Button variant="outline" fullWidth asChild>
+                  <Link to="/profile" onClick={toggleMenu}>
+                    <User className="h-4 w-4 mr-2" />
+                    Profile
+                  </Link>
+                </Button>
+                <Button variant="outline" fullWidth asChild>
+                  <Link to="/settings" onClick={toggleMenu}>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Settings
+                  </Link>
+                </Button>
+                <Button variant="destructive" fullWidth>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Log out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" fullWidth asChild>
+                  <Link to="/login" onClick={toggleMenu}>
+                    Sign In
+                  </Link>
+                </Button>
+                <Button variant="primary" fullWidth asChild>
+                  <Link to="/login?signup=true" onClick={toggleMenu}>
+                    Sign Up
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

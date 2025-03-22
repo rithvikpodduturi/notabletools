@@ -1,57 +1,39 @@
 
-import { useState } from "react";
-import { ArrowLeft, ChevronUp, ExternalLink, MessageSquare, Share2, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Separator } from "./ui/separator";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "./ui/carousel";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
+import React, { useState } from "react";
+import { X, Link as LinkIcon, ThumbsUp, MessageSquare, Share } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ProductCard from "./ProductCard";
 
-interface ProductGalleryImage {
-  src: string;
-  alt: string;
-}
-
-interface ProductDetailProps {
+export interface ProductDetailProps {
   id: string;
   name: string;
   tagline: string;
   description: string;
-  images: ProductGalleryImage[];
+  image: string;
   upvotes: number;
   comments: number;
-  url: string;
+  url?: string;
   pricing?: string;
   platforms?: string[];
   categories?: string[];
-  maker: {
+  maker?: {
     name: string;
     avatar: string;
   };
-  relatedProducts?: Array<{
-    id: string;
-    name: string;
-    image: string;
-    tagline: string;
-  }>;
+  images?: { src: string; alt: string }[];
+  relatedProducts?: any[];
   onClose: () => void;
-  handleUpvote?: (id: string) => void;
+  handleUpvote: (id: string) => void;
 }
 
-const ProductDetail = ({
+const ProductDetail: React.FC<ProductDetailProps> = ({
   id,
   name,
   tagline,
   description,
-  images,
+  image,
   upvotes,
   comments,
   url,
@@ -59,213 +41,222 @@ const ProductDetail = ({
   platforms,
   categories,
   maker,
-  relatedProducts = [],
+  images,
+  relatedProducts,
   onClose,
   handleUpvote,
-}: ProductDetailProps) => {
-  const [hasUpvoted, setHasUpvoted] = useState(false);
-  const [currentUpvotes, setCurrentUpvotes] = useState(upvotes);
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-
-  const onUpvote = () => {
-    if (!hasUpvoted) {
-      setHasUpvoted(true);
-      setCurrentUpvotes(currentUpvotes + 1);
-      handleUpvote?.(id);
+}) => {
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isUpvoted, setIsUpvoted] = useState(false);
+  
+  const handleUpvoteClick = () => {
+    setIsUpvoted(!isUpvoted);
+    handleUpvote(id);
+  };
+  
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
     }
   };
-
+  
   return (
-    <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex justify-center overflow-y-auto p-4 sm:p-6">
-      <div className="relative w-full max-w-3xl mx-auto">
-        <Card className="border shadow-lg animate-fade-in">
-          <div className="sticky top-0 z-10 bg-card flex items-center justify-between p-4 border-b">
-            <Button variant="ghost" size="icon" onClick={onClose} className="mr-auto">
-              <ArrowLeft className="h-4 w-4" />
-              <span className="sr-only">Back</span>
-            </Button>
-            
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon">
-                <Share2 className="h-4 w-4" />
-                <span className="sr-only">Share</span>
-              </Button>
-              
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <X className="h-4 w-4" />
-                <span className="sr-only">Close</span>
-              </Button>
-            </div>
-          </div>
-          
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex flex-col-reverse sm:flex-row sm:items-start gap-4 mb-6">
-              <div className="flex-1">
-                <h2 className="text-2xl font-bold mb-1">{name}</h2>
-                <p className="text-muted-foreground mb-4">{tagline}</p>
-                
-                <div className="flex items-center gap-3 mb-4">
-                  <Button 
-                    variant={hasUpvoted ? "default" : "outline"}
-                    onClick={onUpvote}
-                    className={cn(
-                      "flex items-center gap-1.5",
-                      hasUpvoted && "bg-brand-orange hover:bg-brand-orange/90"
-                    )}
-                  >
-                    <ChevronUp className="h-4 w-4" />
-                    <span>{currentUpvotes}</span>
-                  </Button>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="gap-1.5"
-                    onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
-                  >
-                    <span>Visit Website</span>
-                    <ExternalLink className="h-4 w-4" />
-                  </Button>
-                </div>
-                
-                <div className="flex items-center mb-6">
-                  <Avatar className="h-8 w-8 mr-2">
-                    <AvatarImage src={maker.avatar} alt={maker.name} />
-                    <AvatarFallback>{maker.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm">Made by <span className="font-medium">{maker.name}</span></span>
-                </div>
-                
-                <Collapsible open={isDescriptionExpanded} onOpenChange={setIsDescriptionExpanded}>
-                  <div className={cn(
-                    "prose prose-sm max-w-none",
-                    !isDescriptionExpanded && "line-clamp-3"
-                  )}>
-                    <p>{description}</p>
-                  </div>
-                  
-                  <CollapsibleTrigger asChild>
-                    <Button variant="ghost" size="sm" className="mt-2 h-auto p-0 font-normal underline">
-                      {isDescriptionExpanded ? "Read less" : "Read more"}
-                    </Button>
-                  </CollapsibleTrigger>
-                  
-                  <CollapsibleContent>
-                    {/* More content would be here */}
-                  </CollapsibleContent>
-                </Collapsible>
-              </div>
-              
-              <div className="w-full sm:w-40 flex-shrink-0">
-                <div className="rounded-lg overflow-hidden border">
-                  <img 
-                    src={images[0]?.src || ""} 
-                    alt={images[0]?.alt || name}
-                    className="w-full aspect-square object-cover"
-                  />
-                </div>
-              </div>
-            </div>
+    <div 
+      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+      onClick={handleBackdropClick}
+    >
+      <div 
+        className="bg-background rounded-lg max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-full bg-background shadow-md hover:bg-muted z-10"
+          >
+            <X className="h-5 w-5" />
+          </button>
 
-            <div className="mb-8">
-              <h3 className="font-medium mb-3">Gallery</h3>
-              <Carousel className="w-full">
-                <CarouselContent>
-                  {images.map((image, index) => (
-                    <CarouselItem key={index} className="basis-full md:basis-1/2 lg:basis-1/3">
-                      <div className="p-1">
-                        <div className="rounded-lg overflow-hidden border aspect-[4/3]">
-                          <img 
-                            src={image.src} 
-                            alt={image.alt} 
+          <div className="p-6">
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Product main info */}
+              <div className="md:w-2/3 space-y-6">
+                <div className="flex items-start gap-4">
+                  <img
+                    src={image}
+                    alt={name}
+                    className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
+                  />
+                  <div className="flex-grow">
+                    <h1 className="text-2xl font-bold">{name}</h1>
+                    <p className="text-muted-foreground mb-2">{tagline}</p>
+                    
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {categories?.map((category) => (
+                        <Badge key={category} variant="outline">
+                          {category}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <div className="flex items-center gap-4">
+                      <Button
+                        variant={isUpvoted ? "default" : "outline"}
+                        size="sm"
+                        className="gap-1"
+                        onClick={handleUpvoteClick}
+                      >
+                        <ThumbsUp className="h-4 w-4" />
+                        <span>{upvotes + (isUpvoted ? 1 : 0)}</span>
+                      </Button>
+                      
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <MessageSquare className="h-4 w-4" />
+                        <span>{comments}</span>
+                      </div>
+                      
+                      <Button variant="outline" size="sm" className="gap-1">
+                        <Share className="h-4 w-4" />
+                        <span>Share</span>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Gallery */}
+                {images && images.length > 0 && (
+                  <div className="space-y-3">
+                    <div className="rounded-lg overflow-hidden bg-muted/50 aspect-video">
+                      <img
+                        src={images[activeImageIndex].src}
+                        alt={images[activeImageIndex].alt}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2">
+                      {images.map((img, index) => (
+                        <button
+                          key={index}
+                          className={`rounded-md overflow-hidden h-16 w-24 flex-shrink-0 border-2 transition-all ${
+                            activeImageIndex === index
+                              ? "border-brand-orange"
+                              : "border-transparent"
+                          }`}
+                          onClick={() => setActiveImageIndex(index)}
+                        >
+                          <img
+                            src={img.src}
+                            alt={img.alt}
                             className="w-full h-full object-cover"
                           />
-                        </div>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="-left-4" />
-                <CarouselNext className="-right-4" />
-              </Carousel>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div>
-                <h4 className="text-sm font-medium mb-2">Website</h4>
-                <a 
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-brand-orange hover:underline flex items-center gap-1"
-                >
-                  <span className="truncate">{new URL(url).hostname}</span>
-                  <ExternalLink className="h-3 w-3 flex-shrink-0" />
-                </a>
-              </div>
-              
-              {pricing && (
-                <div>
-                  <h4 className="text-sm font-medium mb-2">Pricing</h4>
-                  <p className="text-sm">{pricing}</p>
-                </div>
-              )}
-              
-              {platforms && platforms.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium mb-2">Platforms</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {platforms.map((platform, i) => (
-                      <span key={i} className="text-xs bg-muted px-2 py-1 rounded">
-                        {platform}
-                      </span>
-                    ))}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Description */}
+                <div className="space-y-4">
+                  <h2 className="text-xl font-semibold">About {name}</h2>
+                  <div className="prose prose-sm max-w-none">
+                    <p>{description}</p>
                   </div>
                 </div>
-              )}
-            </div>
-            
-            {categories && categories.length > 0 && (
-              <div className="mb-8">
-                <h4 className="text-sm font-medium mb-2">Categories</h4>
-                <div className="flex flex-wrap gap-1">
-                  {categories.map((category, i) => (
-                    <span key={i} className="text-xs bg-muted px-2 py-1 rounded">
-                      {category}
-                    </span>
-                  ))}
+                
+                {/* Comments - Placeholder */}
+                <div className="space-y-4">
+                  <h2 className="text-xl font-semibold">Comments ({comments})</h2>
+                  <div className="bg-muted/50 rounded-lg p-6 text-center">
+                    <p className="text-muted-foreground">Comments coming soon</p>
+                  </div>
                 </div>
               </div>
-            )}
-            
-            <Separator className="my-6" />
-            
-            <div className="mb-8">
-              <h3 className="font-medium mb-3">Comments ({comments})</h3>
-              <div className="bg-muted/50 rounded-lg p-4 text-center">
-                <p className="text-sm text-muted-foreground">Comment functionality will be implemented in the next phase</p>
-              </div>
-            </div>
-            
-            {relatedProducts.length > 0 && (
-              <div>
-                <h3 className="font-medium mb-3">Related Products</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {relatedProducts.map((product) => (
-                    <div key={product.id} className="border rounded-lg p-3 hover:shadow-sm transition-shadow">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded overflow-hidden bg-muted flex-shrink-0">
-                          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                        </div>
-                        <h4 className="font-medium text-sm line-clamp-1">{product.name}</h4>
+              
+              {/* Sidebar info */}
+              <div className="md:w-1/3 space-y-6">
+                <div className="bg-muted/30 rounded-lg p-4 space-y-4">
+                  <Button variant="default" className="w-full gap-2">
+                    <LinkIcon className="h-4 w-4" />
+                    <span>Get it</span>
+                  </Button>
+                  
+                  {maker && (
+                    <div>
+                      <h3 className="text-sm font-medium mb-2">Maker</h3>
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={maker.avatar} alt={maker.name} />
+                          <AvatarFallback>{maker.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm">{maker.name}</span>
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{product.tagline}</p>
                     </div>
-                  ))}
+                  )}
+                  
+                  {url && (
+                    <div>
+                      <h3 className="text-sm font-medium mb-2">Website</h3>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-600 hover:underline break-all"
+                      >
+                        {url.replace(/(^\w+:|^)\/\//, "")}
+                      </a>
+                    </div>
+                  )}
+                  
+                  {pricing && (
+                    <div>
+                      <h3 className="text-sm font-medium mb-2">Pricing</h3>
+                      <p className="text-sm">{pricing}</p>
+                    </div>
+                  )}
+                  
+                  {platforms && platforms.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-medium mb-2">Platforms</h3>
+                      <div className="flex flex-wrap gap-1">
+                        {platforms.map((platform) => (
+                          <Badge key={platform} variant="secondary" className="text-xs">
+                            {platform}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
+                
+                {/* Related products */}
+                {relatedProducts && relatedProducts.length > 0 && (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium">Related Products</h3>
+                    <div className="space-y-3">
+                      {relatedProducts.map((product) => (
+                        <div key={product.id} className="bg-muted/30 rounded-lg p-3">
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-10 h-10 rounded-md object-cover flex-shrink-0"
+                            />
+                            <div>
+                              <h4 className="font-medium text-sm">{product.name}</h4>
+                              <p className="text-xs text-muted-foreground line-clamp-1">
+                                {product.tagline}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
