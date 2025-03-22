@@ -52,34 +52,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       lg: "px-5 py-2.5 text-lg rounded-md",
     };
 
-    const Comp = asChild ? Slot : "button";
-
     // Create the button content
     const buttonContent = (
-      <span className={cn(loading && "invisible")}>
-        {iconPosition === "left" && icon && (
-          <span className="mr-2 inline-flex">{icon}</span>
-        )}
-        {children}
-        {iconPosition === "right" && icon && (
-          <span className="ml-2 inline-flex">{icon}</span>
-        )}
-      </span>
-    );
-
-    return (
-      <Comp
-        ref={ref}
-        disabled={loading || disabled}
-        className={cn(
-          "relative font-medium inline-flex items-center justify-center transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange disabled:opacity-60 disabled:cursor-not-allowed",
-          variantStyles[variant],
-          sizeStyles[size],
-          fullWidth && "w-full",
-          className
-        )}
-        {...props}
-      >
+      <>
         {loading && (
           <span className="absolute inset-0 flex items-center justify-center">
             <svg
@@ -104,8 +79,55 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
           </span>
         )}
+        <span className={cn(loading && "invisible")}>
+          {iconPosition === "left" && icon && (
+            <span className="mr-2 inline-flex">{icon}</span>
+          )}
+          {children}
+          {iconPosition === "right" && icon && (
+            <span className="ml-2 inline-flex">{icon}</span>
+          )}
+        </span>
+      </>
+    );
+
+    if (asChild) {
+      return (
+        <Slot
+          ref={ref}
+          disabled={loading || disabled}
+          className={cn(
+            "relative font-medium inline-flex items-center justify-center transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange disabled:opacity-60 disabled:cursor-not-allowed",
+            variantStyles[variant],
+            sizeStyles[size],
+            fullWidth && "w-full",
+            className
+          )}
+          {...props}
+        >
+          {/* Slot requires exactly one child element */}
+          <span className="flex items-center justify-center">
+            {buttonContent}
+          </span>
+        </Slot>
+      );
+    }
+
+    return (
+      <button
+        ref={ref}
+        disabled={loading || disabled}
+        className={cn(
+          "relative font-medium inline-flex items-center justify-center transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange disabled:opacity-60 disabled:cursor-not-allowed",
+          variantStyles[variant],
+          sizeStyles[size],
+          fullWidth && "w-full",
+          className
+        )}
+        {...props}
+      >
         {buttonContent}
-      </Comp>
+      </button>
     );
   }
 );
