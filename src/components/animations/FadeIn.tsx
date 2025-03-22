@@ -10,6 +10,8 @@ type FadeInProps = {
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   distance?: number;
   threshold?: number;
+  once?: boolean;
+  easing?: string;
 };
 
 export const FadeIn: React.FC<FadeInProps> = ({
@@ -20,6 +22,8 @@ export const FadeIn: React.FC<FadeInProps> = ({
   direction = 'up',
   distance = 20,
   threshold = 0.1,
+  once = true,
+  easing = 'ease-out',
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
@@ -30,7 +34,11 @@ export const FadeIn: React.FC<FadeInProps> = ({
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
-            observer.unobserve(entry.target);
+            if (once) {
+              observer.unobserve(entry.target);
+            }
+          } else if (!once) {
+            setIsVisible(false);
           }
         });
       },
@@ -47,7 +55,7 @@ export const FadeIn: React.FC<FadeInProps> = ({
         observer.unobserve(current);
       }
     };
-  }, [threshold]);
+  }, [threshold, once]);
 
   const getDirectionStyles = () => {
     if (!isVisible) {
@@ -73,7 +81,7 @@ export const FadeIn: React.FC<FadeInProps> = ({
       className={cn(className)}
       style={{
         opacity: isVisible ? 1 : 0,
-        transition: `opacity ${duration}ms ease-out ${delay}ms, transform ${duration}ms ease-out ${delay}ms`,
+        transition: `opacity ${duration}ms ${easing} ${delay}ms, transform ${duration}ms ${easing} ${delay}ms`,
         ...getDirectionStyles(),
       }}
     >

@@ -1,8 +1,10 @@
 
 import { useState } from "react";
-import { ChevronUp, MessageSquare, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronUp, ExternalLink, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import FadeIn from "./animations/FadeIn";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
 
 interface ProductCardProps {
   id: string;
@@ -11,8 +13,14 @@ interface ProductCardProps {
   image: string;
   upvotes: number;
   comments: number;
+  url?: string;
+  maker?: {
+    name: string;
+    avatar: string;
+  };
   className?: string;
   handleUpvote?: (id: string) => void;
+  handleViewProduct?: (id: string) => void;
   index?: number;
 }
 
@@ -23,8 +31,11 @@ const ProductCard = ({
   image,
   upvotes,
   comments,
+  url = "#",
+  maker,
   className,
   handleUpvote,
+  handleViewProduct,
   index = 0,
 }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -42,6 +53,16 @@ const ProductCard = ({
     }
   };
 
+  const onCardClick = () => {
+    handleViewProduct?.(id);
+  };
+
+  const onExternalLinkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <FadeIn 
       delay={index * 100} 
@@ -50,20 +71,22 @@ const ProductCard = ({
         className
       )}
     >
-      <a
-        href="#"
-        className="block h-full"
+      <div
+        className="block h-full cursor-pointer"
+        onClick={onCardClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="flex p-4 md:p-5">
           <div className="flex-shrink-0 mr-4">
-            <div className="w-16 h-16 rounded-xl overflow-hidden border border-muted bg-muted/20">
+            <div className="w-20 h-20 rounded-xl overflow-hidden border border-muted bg-muted/20">
               <img
                 src={image}
                 alt={name}
                 className="w-full h-full object-cover transform-gpu transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
+                width="80"
+                height="80"
               />
             </div>
           </div>
@@ -82,34 +105,56 @@ const ProductCard = ({
                 <ArrowUpRight className="h-4 w-4 text-brand-orange" />
               </span>
             </div>
-            <p className="text-muted-foreground text-sm line-clamp-2">
+            <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
               {tagline}
             </p>
+            
+            {maker && (
+              <div className="flex items-center mt-auto">
+                <Avatar className="h-6 w-6 mr-2">
+                  <AvatarImage src={maker.avatar} alt={maker.name} />
+                  <AvatarFallback>{maker.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <span className="text-xs text-muted-foreground">{maker.name}</span>
+              </div>
+            )}
           </div>
         </div>
 
         <div className="flex items-center justify-between px-4 pb-4 md:px-5 md:pb-5">
-          <button
-            onClick={onUpvote}
-            className={cn(
-              "flex items-center gap-1.5 rounded-md py-1 px-2.5 text-sm font-medium transition-all duration-200",
-              hasUpvoted
-                ? "bg-brand-orange/10 text-brand-orange"
-                : "bg-muted hover:bg-brand-orange/10 hover:text-brand-orange"
-            )}
-          >
-            <ChevronUp
-              className={cn("h-4 w-4", hasUpvoted && "text-brand-orange")}
-            />
-            <span>{currentUpvotes}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onUpvote}
+              className={cn(
+                "flex items-center gap-1.5 rounded-md py-1 px-2.5 text-sm font-medium transition-all duration-200",
+                hasUpvoted
+                  ? "bg-brand-orange/10 text-brand-orange"
+                  : "bg-muted hover:bg-brand-orange/10 hover:text-brand-orange"
+              )}
+            >
+              <ChevronUp
+                className={cn("h-4 w-4", hasUpvoted && "text-brand-orange")}
+              />
+              <span>{currentUpvotes}</span>
+            </button>
 
-          <div className="flex items-center text-sm text-muted-foreground">
-            <MessageSquare className="h-4 w-4 mr-1.5" />
-            <span>{comments}</span>
+            <div className="flex items-center text-sm text-muted-foreground">
+              <MessageSquare className="h-4 w-4 mr-1.5" />
+              <span>{comments}</span>
+            </div>
           </div>
+
+          <Button
+            size="sm"
+            variant="outline"
+            className="flex items-center gap-1.5 text-sm hover:text-brand-orange hover:border-brand-orange"
+            onClick={onExternalLinkClick}
+          >
+            <span>Get it</span>
+            <ExternalLink className="h-3.5 w-3.5" />
+          </Button>
         </div>
-      </a>
+      </div>
     </FadeIn>
   );
 };

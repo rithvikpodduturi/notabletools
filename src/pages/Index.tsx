@@ -1,30 +1,59 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
+import ProductDetail from "@/components/ProductDetail";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/animations/FadeIn";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Sample product data
-const productsData = [
+const initialProductsData = [
   {
     id: "1",
     name: "Notion AI",
     tagline: "AI-powered writing assistant integrated with Notion",
+    description: "Notion AI is a writing assistant that helps you write better, faster, and more creatively. It's built right into Notion, so you can use it anywhere you write — from meeting notes and status updates to blog posts and creative stories. Notion AI can summarize long documents, improve your writing, translate languages, and even generate new content based on your prompts.",
     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&w=200&h=200&q=80",
     upvotes: 452,
     comments: 87,
+    url: "https://notion.so/ai",
+    pricing: "Free trial, then $10/mo",
+    platforms: ["Web", "iOS", "Android", "macOS", "Windows"],
+    categories: ["Productivity", "AI", "Writing"],
+    maker: {
+      name: "Notion Labs",
+      avatar: "https://ph-avatars.imgix.net/726329/original?auto=format&fit=crop&crop=faces&w=80&h=80",
+    },
+    images: [
+      { src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&w=600&h=400&q=80", alt: "Notion AI interface" },
+      { src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&w=600&h=400&q=80", alt: "Notion AI in action" },
+      { src: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&w=600&h=400&q=80", alt: "Notion AI features" },
+    ],
   },
   {
     id: "2",
     name: "Figma",
     tagline: "Collaborative interface design tool",
+    description: "Figma is a cloud-based design tool that brings together design, prototyping, and collaboration in one platform. It helps teams create, test, and ship better designs from start to finish. Unlike other design tools, Figma is built for collaboration, making it easy for teams to work together in real time.",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&w=200&h=200&q=80",
     upvotes: 384,
     comments: 56,
+    url: "https://figma.com",
+    pricing: "Free plan, Pro from $12/mo",
+    platforms: ["Web", "macOS", "Windows"],
+    categories: ["Design", "Collaboration", "Prototyping"],
+    maker: {
+      name: "Figma Inc",
+      avatar: "https://ph-avatars.imgix.net/1661271/original?auto=format&fit=crop&crop=faces&w=80&h=80",
+    },
+    images: [
+      { src: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&w=600&h=400&q=80", alt: "Figma interface" },
+      { src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&w=600&h=400&q=80", alt: "Figma collaboration" },
+      { src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&w=600&h=400&q=80", alt: "Figma prototyping" },
+    ],
   },
   {
     id: "3",
@@ -92,9 +121,43 @@ const productsData = [
   },
 ];
 
+// Generate more products for infinite scroll demonstration
+const generateMoreProducts = (page: number, perPage: number = 6) => {
+  const newProducts = [];
+  for (let i = 0; i < perPage; i++) {
+    const sourceProduct = initialProductsData[Math.floor(Math.random() * initialProductsData.length)];
+    newProducts.push({
+      ...sourceProduct,
+      id: `generated-${page}-${i}`,
+      name: `${sourceProduct.name} ${page}.${i}`,
+      upvotes: Math.floor(Math.random() * 400) + 50,
+      comments: Math.floor(Math.random() * 100),
+    });
+  }
+  return newProducts;
+};
+
 const Index = () => {
-  const [products, setProducts] = useState(productsData);
+  const [products, setProducts] = useState(initialProductsData);
   const [selectedTab, setSelectedTab] = useState("today");
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastProductRef = useCallback((node: HTMLDivElement | null) => {
+    if (isLoading) return;
+    if (observer.current) observer.current.disconnect();
+    
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        loadMore();
+      }
+    });
+    
+    if (node) observer.current.observe(node);
+  }, [isLoading, hasMore]);
 
   const handleUpvote = (id: string) => {
     setProducts(prevProducts =>
@@ -104,6 +167,43 @@ const Index = () => {
           : product
       )
     );
+  };
+
+  const loadMore = () => {
+    setIsLoading(true);
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      const newProducts = generateMoreProducts(page);
+      setProducts(prev => [...prev, ...newProducts]);
+      setPage(prev => prev + 1);
+      setIsLoading(false);
+      
+      // After loading 5 pages, stop infinite scroll for this demo
+      if (page >= 5) {
+        setHasMore(false);
+      }
+    }, 1000);
+  };
+
+  const handleViewProduct = (id: string) => {
+    setSelectedProduct(id);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleCloseProductDetail = () => {
+    setSelectedProduct(null);
+    document.body.style.overflow = "";
+  };
+
+  const getSelectedProductDetails = () => {
+    return products.find(product => product.id === selectedProduct) || null;
+  };
+
+  const getRelatedProducts = (currentId: string) => {
+    return products
+      .filter(product => product.id !== currentId)
+      .slice(0, 3);
   };
 
   return (
@@ -129,14 +229,42 @@ const Index = () => {
                         Discover the best products launched today
                       </p>
                       <div className="grid grid-cols-1 gap-4">
-                        {products.slice(0, 6).map((product, index) => (
-                          <ProductCard
-                            key={product.id}
-                            {...product}
-                            handleUpvote={handleUpvote}
-                            index={index}
-                          />
+                        {products.map((product, index) => (
+                          <div 
+                            key={product.id} 
+                            ref={index === products.length - 1 ? lastProductRef : null}
+                          >
+                            <ProductCard
+                              {...product}
+                              handleUpvote={handleUpvote}
+                              handleViewProduct={handleViewProduct}
+                              index={index}
+                            />
+                          </div>
                         ))}
+                        
+                        {isLoading && (
+                          <div className="space-y-4">
+                            {[...Array(3)].map((_, i) => (
+                              <div key={i} className="rounded-xl overflow-hidden bg-white border border-border p-4">
+                                <div className="flex">
+                                  <Skeleton className="w-20 h-20 rounded-xl mr-4" />
+                                  <div className="flex-1">
+                                    <Skeleton className="h-6 w-3/4 mb-2" />
+                                    <Skeleton className="h-4 w-full mb-1" />
+                                    <Skeleton className="h-4 w-2/3" />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {!hasMore && !isLoading && (
+                          <div className="text-center py-8 text-muted-foreground">
+                            You've reached the end of the list
+                          </div>
+                        )}
                       </div>
                     </TabsContent>
                     
@@ -150,6 +278,7 @@ const Index = () => {
                             key={product.id}
                             {...product}
                             handleUpvote={handleUpvote}
+                            handleViewProduct={handleViewProduct}
                             index={index}
                           />
                         ))}
@@ -166,6 +295,7 @@ const Index = () => {
                             key={product.id}
                             {...product}
                             handleUpvote={handleUpvote}
+                            handleViewProduct={handleViewProduct}
                             index={index}
                           />
                         ))}
@@ -182,8 +312,19 @@ const Index = () => {
         </section>
       </main>
       <Footer />
+      
+      {/* Product detail modal */}
+      {selectedProduct && (
+        <ProductDetail
+          {...getSelectedProductDetails()}
+          relatedProducts={getRelatedProducts(selectedProduct)}
+          onClose={handleCloseProductDetail}
+          handleUpvote={handleUpvote}
+        />
+      )}
     </div>
   );
 };
 
 export default Index;
+
