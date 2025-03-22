@@ -52,7 +52,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       lg: "px-5 py-2.5 text-lg rounded-md",
     };
 
-    // Create the button content
+    // Create the button content with loading state
     const buttonContent = (
       <>
         {loading && (
@@ -91,22 +91,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       </>
     );
 
+    const buttonStyles = cn(
+      "relative font-medium inline-flex items-center justify-center transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange disabled:opacity-60 disabled:cursor-not-allowed",
+      variantStyles[variant],
+      sizeStyles[size],
+      fullWidth && "w-full",
+      className
+    );
+
     if (asChild) {
+      // For Slot, we need to wrap all content in a single element
+      // and we can't pass the disabled prop to Slot directly
       return (
         <Slot
-          ref={ref}
-          disabled={loading || disabled}
-          className={cn(
-            "relative font-medium inline-flex items-center justify-center transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange disabled:opacity-60 disabled:cursor-not-allowed",
-            variantStyles[variant],
-            sizeStyles[size],
-            fullWidth && "w-full",
-            className
-          )}
+          ref={ref as React.ForwardedRef<HTMLElement>}
+          className={buttonStyles}
           {...props}
         >
-          {/* Slot requires exactly one child element */}
-          <span className="flex items-center justify-center">
+          <span className="flex items-center justify-center" aria-disabled={disabled || loading}>
             {buttonContent}
           </span>
         </Slot>
@@ -117,13 +119,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={loading || disabled}
-        className={cn(
-          "relative font-medium inline-flex items-center justify-center transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange disabled:opacity-60 disabled:cursor-not-allowed",
-          variantStyles[variant],
-          sizeStyles[size],
-          fullWidth && "w-full",
-          className
-        )}
+        className={buttonStyles}
         {...props}
       >
         {buttonContent}
