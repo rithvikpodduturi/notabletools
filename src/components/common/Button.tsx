@@ -54,6 +54,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const Comp = asChild ? Slot : "button";
 
+    // Create the button content
+    const buttonContent = (
+      <span className={cn(loading && "invisible")}>
+        {iconPosition === "left" && icon && (
+          <span className="mr-2 inline-flex">{icon}</span>
+        )}
+        {children}
+        {iconPosition === "right" && icon && (
+          <span className="ml-2 inline-flex">{icon}</span>
+        )}
+      </span>
+    );
+
     return (
       <Comp
         ref={ref}
@@ -91,15 +104,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
           </span>
         )}
-        <span className={cn(loading && "invisible")}>
-          {iconPosition === "left" && icon && (
-            <span className="mr-2 inline-flex">{icon}</span>
-          )}
-          {children}
-          {iconPosition === "right" && icon && (
-            <span className="ml-2 inline-flex">{icon}</span>
-          )}
-        </span>
+        {buttonContent}
       </Comp>
     );
   }
