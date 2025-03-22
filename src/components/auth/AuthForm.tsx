@@ -3,9 +3,9 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Github, Mail, Twitter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -38,8 +38,8 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 const AuthForm = () => {
   const [tab, setTab] = useState<"login" | "signup">("login");
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
   const { toast } = useToast();
+  const { login, signup, isLoading } = useAuth();
 
   // Login form
   const loginForm = useForm<LoginFormValues>({
@@ -60,28 +60,23 @@ const AuthForm = () => {
     },
   });
 
-  const onLoginSubmit = (data: LoginFormValues) => {
-    console.log("Login data:", data);
-    // Simulate login success
-    toast({
-      title: "Login successful",
-      description: "Welcome back!",
-    });
-    navigate("/dashboard");
+  const onLoginSubmit = async (data: LoginFormValues) => {
+    try {
+      await login(data.email, data.password);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
-  const onSignupSubmit = (data: SignupFormValues) => {
-    console.log("Signup data:", data);
-    // Simulate signup success
-    toast({
-      title: "Account created",
-      description: "Welcome to ProductHunt-like!",
-    });
-    navigate("/dashboard");
+  const onSignupSubmit = async (data: SignupFormValues) => {
+    try {
+      await signup(data.name, data.email, data.password);
+    } catch (error) {
+      console.error("Signup error:", error);
+    }
   };
 
   const handleSocialLogin = (provider: string) => {
-    console.log(`Login with ${provider}`);
     toast({
       title: `${provider} login initiated`,
       description: "Redirecting to authentication provider...",
@@ -153,8 +148,13 @@ const AuthForm = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" variant="default">
-                  Login
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  variant="default"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Logging in..." : "Login"}
                 </Button>
               </form>
             </Form>
@@ -224,8 +224,13 @@ const AuthForm = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" variant="default">
-                  Create Account
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  variant="default"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>
             </Form>

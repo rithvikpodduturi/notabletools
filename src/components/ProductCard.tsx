@@ -1,10 +1,13 @@
 
 import { useState } from "react";
-import { ArrowUpRight, ChevronUp, ExternalLink, MessageSquare } from "lucide-react";
+import { ArrowUpRight, ExternalLink, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import FadeIn from "./animations/FadeIn";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import UpvoteButton from "./social/UpvoteButton";
 
 interface ProductCardProps {
   id: string;
@@ -22,6 +25,7 @@ interface ProductCardProps {
   handleUpvote?: (id: string) => void;
   handleViewProduct?: (id: string) => void;
   index?: number;
+  hasUpvoted?: boolean;
 }
 
 const ProductCard = ({
@@ -37,20 +41,23 @@ const ProductCard = ({
   handleUpvote,
   handleViewProduct,
   index = 0,
+  hasUpvoted = false,
 }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [hasUpvoted, setHasUpvoted] = useState(false);
-  const [currentUpvotes, setCurrentUpvotes] = useState(upvotes);
-
-  const onUpvote = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (!hasUpvoted) {
-      setHasUpvoted(true);
-      setCurrentUpvotes(currentUpvotes + 1);
-      handleUpvote?.(id);
+  const { isAuthenticated } = useAuth();
+  const { toast } = useToast();
+  
+  const onUpvote = (id: string) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to upvote products",
+        variant: "destructive",
+      });
+      return;
     }
+    
+    handleUpvote?.(id);
   };
 
   const onCardClick = () => {
@@ -123,20 +130,12 @@ const ProductCard = ({
 
         <div className="flex items-center justify-between px-4 pb-4 md:px-5 md:pb-5">
           <div className="flex items-center gap-2">
-            <button
-              onClick={onUpvote}
-              className={cn(
-                "flex items-center gap-1.5 rounded-md py-1 px-2.5 text-sm font-medium transition-all duration-200",
-                hasUpvoted
-                  ? "bg-brand-orange/10 text-brand-orange"
-                  : "bg-muted hover:bg-brand-orange/10 hover:text-brand-orange"
-              )}
-            >
-              <ChevronUp
-                className={cn("h-4 w-4", hasUpvoted && "text-brand-orange")}
-              />
-              <span>{currentUpvotes}</span>
-            </button>
+            <UpvoteButton
+              productId={id}
+              initialCount={upvotes}
+              hasUpvoted={hasUpvoted}
+              onUpvote={onUpvote}
+            />
 
             <div className="flex items-center text-sm text-muted-foreground">
               <MessageSquare className="h-4 w-4 mr-1.5" />
