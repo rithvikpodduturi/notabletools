@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import FadeIn from "@/components/animations/FadeIn";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
+import { BottomNav } from "@/components/mobile/BottomNav";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Sample product data
 const initialProductsData = [
@@ -144,6 +146,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const isMobile = useIsMobile();
   
   const observer = useRef<IntersectionObserver | null>(null);
   const lastProductRef = useCallback((node: HTMLDivElement | null) => {
@@ -207,18 +210,18 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col pb-16 md:pb-0">
       <Header />
       <main className="flex-grow">
         <HeroSection />
         
-        <section id="products" className="py-16 bg-muted/30">
+        <section id="products" className="py-8 md:py-16 bg-muted/30">
           <div className="container-custom">
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="flex-grow">
                 <FadeIn>
                   <Tabs defaultValue="today" className="mb-8">
-                    <TabsList className="mb-2">
+                    <TabsList className="mb-2 w-full justify-start overflow-x-auto">
                       <TabsTrigger value="today" onClick={() => setSelectedTab("today")}>Today</TabsTrigger>
                       <TabsTrigger value="week" onClick={() => setSelectedTab("week")}>This Week</TabsTrigger>
                       <TabsTrigger value="month" onClick={() => setSelectedTab("month")}>This Month</TabsTrigger>
@@ -248,7 +251,10 @@ const Index = () => {
                             {[...Array(3)].map((_, i) => (
                               <div key={i} className="rounded-xl overflow-hidden bg-white border border-border p-4">
                                 <div className="flex">
-                                  <Skeleton className="w-20 h-20 rounded-xl mr-4" />
+                                  <Skeleton className={cn(
+                                    "rounded-xl mr-4",
+                                    isMobile ? "w-16 h-16" : "w-20 h-20"
+                                  )} />
                                   <div className="flex-1">
                                     <Skeleton className="h-6 w-3/4 mb-2" />
                                     <Skeleton className="h-4 w-full mb-1" />
@@ -305,13 +311,16 @@ const Index = () => {
                 </FadeIn>
               </div>
               
-              {/* Sidebar */}
-              <Sidebar />
+              {/* Sidebar - hide on mobile */}
+              {!isMobile && <Sidebar />}
             </div>
           </div>
         </section>
       </main>
       <Footer />
+      
+      {/* Bottom Navigation - only on mobile */}
+      <BottomNav />
       
       {/* Product detail modal */}
       {selectedProduct && (
@@ -327,4 +336,3 @@ const Index = () => {
 };
 
 export default Index;
-

@@ -8,6 +8,7 @@ import { Button } from "./ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import UpvoteButton from "./social/UpvoteButton";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductCardProps {
   id: string;
@@ -46,6 +47,7 @@ const ProductCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const onUpvote = (id: string) => {
     if (!isAuthenticated) {
@@ -84,23 +86,29 @@ const ProductCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="flex p-4 md:p-5">
+        <div className="flex p-4">
           <div className="flex-shrink-0 mr-4">
-            <div className="w-20 h-20 rounded-xl overflow-hidden border border-muted bg-muted/20">
+            <div className={cn(
+              "rounded-xl overflow-hidden border border-muted bg-muted/20",
+              isMobile ? "w-16 h-16" : "w-20 h-20"
+            )}>
               <img
                 src={image}
                 alt={name}
                 className="w-full h-full object-cover transform-gpu transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
-                width="80"
-                height="80"
+                width={isMobile ? "64" : "80"}
+                height={isMobile ? "64" : "80"}
               />
             </div>
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center mb-1">
-              <h3 className="text-lg font-medium line-clamp-1 mr-2">
+              <h3 className={cn(
+                "font-medium line-clamp-1 mr-2",
+                isMobile ? "text-base" : "text-lg"
+              )}>
                 {name}
               </h3>
               <span
@@ -112,13 +120,19 @@ const ProductCard = ({
                 <ArrowUpRight className="h-4 w-4 text-brand-orange" />
               </span>
             </div>
-            <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
+            <p className={cn(
+              "text-muted-foreground line-clamp-2 mb-3",
+              isMobile ? "text-xs" : "text-sm"
+            )}>
               {tagline}
             </p>
             
             {maker && (
               <div className="flex items-center mt-auto">
-                <Avatar className="h-6 w-6 mr-2">
+                <Avatar className={cn(
+                  "mr-2",
+                  isMobile ? "h-5 w-5" : "h-6 w-6"
+                )}>
                   <AvatarImage src={maker.avatar} alt={maker.name} />
                   <AvatarFallback>{maker.name.charAt(0)}</AvatarFallback>
                 </Avatar>
@@ -128,7 +142,7 @@ const ProductCard = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-between px-4 pb-4 md:px-5 md:pb-5">
+        <div className="flex items-center justify-between px-4 pb-4">
           <div className="flex items-center gap-2">
             <UpvoteButton
               productId={id}
@@ -144,7 +158,7 @@ const ProductCard = ({
           </div>
 
           <Button
-            size="sm"
+            size={isMobile ? "sm" : "sm"}
             variant="outline"
             className="flex items-center gap-1.5 text-sm hover:text-brand-orange hover:border-brand-orange"
             onClick={onExternalLinkClick}

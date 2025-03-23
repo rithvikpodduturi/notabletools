@@ -10,6 +10,8 @@ import { formatDistanceToNow } from "date-fns";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import FadeIn from "@/components/animations/FadeIn";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface CollectionCardProps {
   collection: Collection;
@@ -39,6 +41,7 @@ const CollectionCard = ({
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const handleFollow = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -81,40 +84,49 @@ const CollectionCard = ({
         className="cursor-pointer hover:border-brand-orange/30 hover:shadow-md transition-all" 
         onClick={handleClick}
       >
-        <CardHeader className="pb-2">
+        <CardHeader className={cn("pb-2", isMobile && "p-3")}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-medium">{name}</h3>
+              <h3 className={cn(
+                "font-medium line-clamp-1",
+                isMobile ? "text-base" : "text-lg"
+              )}>{name}</h3>
               {!isPublic && <Lock className="h-4 w-4 text-muted-foreground" />}
             </div>
             <div className="flex gap-2">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8"
+                className={cn("h-8 w-8", isMobile && "h-7 w-7")}
                 onClick={handleShare}
               >
-                <Share2 className="h-4 w-4" />
+                <Share2 className={cn("h-4 w-4", isMobile && "h-3.5 w-3.5")} />
               </Button>
               <Button
                 variant={isFollowed ? "secondary" : "outline"}
                 size="icon"
-                className="h-8 w-8"
+                className={cn("h-8 w-8", isMobile && "h-7 w-7")}
                 onClick={handleFollow}
               >
                 {isFollowed ? (
-                  <Bookmark className="h-4 w-4" />
+                  <Bookmark className={cn("h-4 w-4", isMobile && "h-3.5 w-3.5")} />
                 ) : (
-                  <BookmarkPlus className="h-4 w-4" />
+                  <BookmarkPlus className={cn("h-4 w-4", isMobile && "h-3.5 w-3.5")} />
                 )}
               </Button>
             </div>
           </div>
-          <p className="text-muted-foreground text-sm line-clamp-2">{description}</p>
+          <p className={cn(
+            "text-muted-foreground line-clamp-2",
+            isMobile ? "text-xs" : "text-sm"
+          )}>{description}</p>
         </CardHeader>
         
-        <CardContent className="pb-0">
-          <div className="relative h-24 rounded-md overflow-hidden bg-muted">
+        <CardContent className={cn("pb-0", isMobile && "p-3 pt-0")}>
+          <div className={cn(
+            "relative rounded-md overflow-hidden bg-muted",
+            isMobile ? "h-20" : "h-24"
+          )}>
             {previewImages.length > 0 ? (
               <div className="grid grid-cols-3 h-full gap-1">
                 {previewImages.map((img, i) => (
@@ -140,9 +152,14 @@ const CollectionCard = ({
           </div>
         </CardContent>
         
-        <CardFooter className="pt-4 flex justify-between items-center">
+        <CardFooter className={cn(
+          "pt-4 flex justify-between items-center",
+          isMobile && "p-3 pt-4"
+        )}>
           <div className="flex items-center gap-2">
-            <Avatar className="h-6 w-6">
+            <Avatar className={cn(
+              isMobile ? "h-5 w-5" : "h-6 w-6"
+            )}>
               <AvatarImage src={createdBy.avatar} />
               <AvatarFallback>{createdBy.name.charAt(0)}</AvatarFallback>
             </Avatar>
