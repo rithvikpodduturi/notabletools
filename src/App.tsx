@@ -13,6 +13,10 @@ import NotFound from "./pages/NotFound";
 import Submit from "./pages/Submit";
 import Admin from "./pages/Admin";
 import Popular from "./pages/Popular";
+import Rankings from "./pages/Rankings";
+import Collections from "./pages/Collections";
+import CollectionDetail from "./pages/CollectionDetail";
+import Recaps from "./pages/Recaps";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +36,10 @@ const App = () => (
             <Route path="/submit" element={<Submit />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/popular" element={<Popular />} />
+            <Route path="/rankings" element={<Rankings />} />
+            <Route path="/collections" element={<Collections />} />
+            <Route path="/collections/:id" element={<CollectionDetail />} />
+            <Route path="/recaps" element={<Recaps />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
