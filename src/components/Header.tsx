@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Search, ChevronDown, Settings, LogOut, User } from "lucide-react";
+import { Menu, X, ChevronDown, Settings, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "./common/Button";
 import { NotificationBell } from "./user/NotificationCenter";
@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SearchCommand } from "./search/SearchCommand";
 
 // Simulated auth state - replace with real auth state management
 const simulatedUser = {
@@ -22,6 +23,27 @@ const simulatedUser = {
   username: "sarahj",
   avatar: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&q=80&w=200&h=200",
 };
+
+// Simulated products data for search
+const sampleProducts = [
+  {
+    id: "1",
+    name: "Notion AI",
+    tagline: "AI-powered writing assistant integrated with Notion",
+    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&w=200&h=200&q=80",
+    categories: ["AI Tools", "Productivity", "Writing"],
+    platforms: ["Web", "iOS", "Android", "macOS", "Windows"],
+  },
+  {
+    id: "2",
+    name: "Figma",
+    tagline: "Collaborative interface design tool",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&w=200&h=200&q=80",
+    categories: ["Design Tools", "Collaboration", "Prototyping"],
+    platforms: ["Web", "macOS", "Windows"],
+  },
+  // More products would be here in a real app
+];
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,7 +81,7 @@ const Header = () => {
             <div className="bg-brand-orange text-white h-8 w-8 rounded-md flex items-center justify-center">
               P
             </div>
-            <span className="hidden sm:inline">ProductHunt-like</span>
+            <span className="hidden sm:inline">Discoverify</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -72,9 +94,7 @@ const Header = () => {
 
           {/* Desktop Right Section */}
           <div className="hidden md:flex items-center space-x-2">
-            <button className="p-2 hover:bg-muted rounded-full transition-colors">
-              <Search className="h-5 w-5 text-muted-foreground" />
-            </button>
+            <SearchCommand products={sampleProducts} />
             
             {isLoggedIn ? (
               <>
@@ -154,6 +174,10 @@ const Header = () => {
         )}
       >
         <div className="flex flex-col h-full p-6 pt-8">
+          <div className="mb-4">
+            <SearchCommand products={sampleProducts} />
+          </div>
+          
           <nav className="flex flex-col space-y-4 mb-8">
             <MobileNavLink to="/" label="Home" onClick={toggleMenu} />
             <MobileNavLink to="/popular" label="Popular" onClick={toggleMenu} />

@@ -18,6 +18,8 @@ import Rankings from "./pages/Rankings";
 import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
 import Recaps from "./pages/Recaps";
+import Topics from "./pages/Topics";
+import TopicPage from "./pages/TopicPage";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +59,8 @@ const App = () => {
               <Route path="/collections" element={<Collections />} />
               <Route path="/collections/:id" element={<CollectionDetail />} />
               <Route path="/recaps" element={<Recaps />} />
+              <Route path="/topics" element={<Topics />} />
+              <Route path="/topics/:topicSlug" element={<TopicPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
