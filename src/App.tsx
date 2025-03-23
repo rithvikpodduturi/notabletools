@@ -21,6 +21,8 @@ import CollectionDetail from "./pages/CollectionDetail";
 import Recaps from "./pages/Recaps";
 import Topics from "./pages/Topics";
 import TopicPage from "./pages/TopicPage";
+import ApiDocs from "./pages/ApiDocs";
+import ApiKeyManagement from "./pages/ApiKeyManagement";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +65,8 @@ const App = () => {
               <Route path="/recaps" element={<Recaps />} />
               <Route path="/topics" element={<Topics />} />
               <Route path="/topics/:topicSlug" element={<TopicPage />} />
+              <Route path="/api-docs" element={<ApiDocs />} />
+              <Route path="/api-keys" element={<ApiKeyManagement />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
