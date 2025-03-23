@@ -13,6 +13,7 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import Submit from "./pages/Submit";
 import Admin from "./pages/Admin";
+import Analytics from "./pages/Analytics";
 import Popular from "./pages/Popular";
 import Rankings from "./pages/Rankings";
 import Collections from "./pages/Collections";
@@ -54,6 +55,7 @@ const App = () => {
               <Route path="/settings" element={<Settings />} />
               <Route path="/submit" element={<Submit />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/analytics" element={<Analytics />} />
               <Route path="/popular" element={<Popular />} />
               <Route path="/rankings" element={<Rankings />} />
               <Route path="/collections" element={<Collections />} />
