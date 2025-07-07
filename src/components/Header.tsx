@@ -81,7 +81,7 @@ const Header = () => {
             <div className="bg-brand-orange text-white h-8 w-8 rounded-md flex items-center justify-center">
               P
             </div>
-            <span className="hidden sm:inline">Discoverify</span>
+            <span className="hidden sm:inline">Notabletools</span>
           </Link>
 
           {/* Desktop Navigation */}

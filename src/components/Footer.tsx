@@ -12,10 +12,10 @@ const Footer = () => {
               <div className="bg-brand-orange text-white h-8 w-8 rounded-md flex items-center justify-center">
                 P
               </div>
-              <span>ProductHunt-like</span>
+              <span>Notabletools</span>
             </Link>
             <p className="text-muted-foreground text-sm">
-              A community of product enthusiasts discovering and sharing the most innovative tech products.
+              A community of tool enthusiasts discovering and sharing the most innovative and notable tools.
             </p>
             <div className="flex space-x-4 mt-4">
               <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -63,7 +63,7 @@ const Footer = () => {
 
         <div className="border-t border-border mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} ProductHunt-like. All rights reserved.
+            © {new Date().getFullYear()} Notabletools. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">

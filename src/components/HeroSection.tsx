@@ -16,17 +16,17 @@ const HeroSection = () => {
       <div className="container-custom max-w-5xl relative z-10">
         <FadeIn className="text-center space-y-6 max-w-3xl mx-auto">
           <h1 className="font-bold text-balance">
-            Discover the best new products,{" "}
+            Discover the best new tools,{" "}
             <span className="text-brand-orange">every day</span>
           </h1>
           <p className="text-lg text-muted-foreground">
             A community-curated platform where you can discover, share, and
-            upvote the most innovative and exciting tech products.
+            upvote the most innovative and notable tools.
           </p>
           <div className="pt-4 flex items-center justify-center space-x-4">
-            <Button size="lg">Discover Products</Button>
+            <Button size="lg">Discover Tools</Button>
             <Button variant="outline" size="lg">
-              Submit Your Product
+              Submit Your Tool
             </Button>
           </div>
         </FadeIn>

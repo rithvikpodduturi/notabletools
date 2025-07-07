@@ -1,8 +1,8 @@
 
 {
-  "name": "Discoverify - Product Discovery Platform",
-  "short_name": "Discoverify",
-  "description": "Discover, share and upvote the best new products",
+  "name": "Notabletools - Notable Tools Discovery Platform",
+  "short_name": "Notabletools",
+  "description": "Discover, share and upvote the best new tools",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
