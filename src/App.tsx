@@ -15,6 +15,7 @@ import Submit from "./pages/Submit";
 import Admin from "./pages/Admin";
 import Analytics from "./pages/Analytics";
 import Popular from "./pages/Popular";
+import Newest from "./pages/Newest";
 import Rankings from "./pages/Rankings";
 import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
@@ -59,6 +60,7 @@ const App = () => {
               <Route path="/admin" element={<Admin />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/popular" element={<Popular />} />
+              <Route path="/newest" element={<Newest />} />
               <Route path="/rankings" element={<Rankings />} />
               <Route path="/collections" element={<Collections />} />
               <Route path="/collections/:id" element={<CollectionDetail />} />

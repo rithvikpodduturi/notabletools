@@ -33,19 +33,19 @@ const Footer = () => {
           <div>
             <h4 className="font-medium mb-4">Products</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Popular</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Newest</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Trending</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Collections</a></li>
+              <li><Link to="/popular" className="hover:text-foreground transition-colors">Popular</Link></li>
+              <li><Link to="/newest" className="hover:text-foreground transition-colors">Newest</Link></li>
+              <li><Link to="/rankings" className="hover:text-foreground transition-colors">Trending</Link></li>
+              <li><Link to="/collections" className="hover:text-foreground transition-colors">Collections</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-medium mb-4">Resources</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Submit Product</a></li>
+              <li><Link to="/submit" className="hover:text-foreground transition-colors">Submit Product</Link></li>
               <li><a href="#" className="hover:text-foreground transition-colors">Advertise</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Developer API</a></li>
+              <li><Link to="/api-docs" className="hover:text-foreground transition-colors">Developer API</Link></li>
               <li><a href="#" className="hover:text-foreground transition-colors">Maker Community</a></li>
             </ul>
           </div>
