@@ -44,8 +44,8 @@ const Sidebar = () => {
   return (
     <aside className="space-y-8 w-full lg:w-80 xl:w-96">
       {/* Trending Topics */}
-      <FadeIn className="rounded-2xl border border-primary/10 p-6 bg-gradient-to-br from-white via-primary/5 to-purple-500/5">
-        <h3 className="font-semibold text-lg mb-5 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Trending Topics</h3>
+      <FadeIn className="rounded-2xl border border-primary/10 p-6 bg-gradient-to-br from-white via-primary/5 to-secondary/5">
+        <h3 className="font-semibold text-lg mb-5 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Trending Topics</h3>
         <div className="space-y-1">
           {topics.map((topic, index) => (
             <a
@@ -63,16 +63,16 @@ const Sidebar = () => {
       {/* Newsletter Signup */}
       <FadeIn 
         delay={100} 
-        className="rounded-2xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 via-white to-purple-500/5 relative overflow-hidden"
+        className="rounded-2xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 via-white to-secondary/5 relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-purple-500/10 opacity-50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-50"></div>
         <div className="relative z-10">
           <div className="flex gap-3 mb-4">
-            <div className="bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl h-10 w-10 flex items-center justify-center shadow-lg">
+            <div className="bg-gradient-to-r from-primary to-secondary text-white rounded-xl h-10 w-10 flex items-center justify-center shadow-lg">
               <BellRing className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Daily Insights</h3>
+              <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Daily Insights</h3>
               <p className="text-xs text-muted-foreground">Curated for creators</p>
             </div>
           </div>
@@ -95,7 +95,7 @@ const Sidebar = () => {
               icon={<ArrowRight className="h-4 w-4" />}
               iconPosition="right"
               fullWidth
-              className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 rounded-xl py-3"
+              className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 rounded-xl py-3"
             >
               Subscribe
             </Button>

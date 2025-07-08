@@ -89,7 +89,7 @@ const ProductCard = ({
         <div className="flex p-6">
           <div className="flex-shrink-0 mr-4 relative">
             <div className={cn(
-              "rounded-2xl overflow-hidden border border-primary/10 bg-gradient-to-br from-primary/5 to-purple-500/5 p-1",
+              "rounded-2xl overflow-hidden border border-primary/10 bg-gradient-to-br from-primary/5 to-secondary/5 p-1",
               isMobile ? "w-16 h-16" : "w-20 h-20"
             )}>
               <div className={cn(
@@ -106,7 +106,7 @@ const ProductCard = ({
                 />
               </div>
             </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-purple-500 rounded-full opacity-80"></div>
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full opacity-80"></div>
           </div>
 
           <div className="flex-1 min-w-0">
