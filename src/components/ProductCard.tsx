@@ -76,7 +76,7 @@ const ProductCard = ({
     <FadeIn 
       delay={index * 100} 
       className={cn(
-        "group relative rounded-xl overflow-hidden transition-all duration-300 bg-white border border-border hover:border-brand-orange/30 hover:shadow-card",
+        "group relative rounded-2xl overflow-hidden transition-all duration-300 bg-gradient-to-br from-white via-white to-primary/5 border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1",
         className
       )}
     >
@@ -86,21 +86,27 @@ const ProductCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="flex p-4">
-          <div className="flex-shrink-0 mr-4">
+        <div className="flex p-6">
+          <div className="flex-shrink-0 mr-4 relative">
             <div className={cn(
-              "rounded-xl overflow-hidden border border-muted bg-muted/20",
+              "rounded-2xl overflow-hidden border border-primary/10 bg-gradient-to-br from-primary/5 to-purple-500/5 p-1",
               isMobile ? "w-16 h-16" : "w-20 h-20"
             )}>
-              <img
-                src={image}
-                alt={name}
-                className="w-full h-full object-cover transform-gpu transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-                width={isMobile ? "64" : "80"}
-                height={isMobile ? "64" : "80"}
-              />
+              <div className={cn(
+                "rounded-xl overflow-hidden w-full h-full bg-white",
+                isMobile ? "w-14 h-14" : "w-18 h-18"
+              )}>
+                <img
+                  src={image}
+                  alt={name}
+                  className="w-full h-full object-cover transform-gpu transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                  width={isMobile ? "56" : "72"}
+                  height={isMobile ? "56" : "72"}
+                />
+              </div>
             </div>
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-purple-500 rounded-full opacity-80"></div>
           </div>
 
           <div className="flex-1 min-w-0">
@@ -114,10 +120,10 @@ const ProductCard = ({
               <span
                 className={cn(
                   "transform-gpu transition-all duration-300 opacity-0 group-hover:opacity-100",
-                  isHovered ? "translate-x-0" : "-translate-x-2"
+                  isHovered ? "translate-x-0 rotate-0" : "-translate-x-2 -rotate-45"
                 )}
               >
-                <ArrowUpRight className="h-4 w-4 text-brand-orange" />
+                <ArrowUpRight className="h-4 w-4 text-primary" />
               </span>
             </div>
             <p className={cn(
@@ -142,8 +148,8 @@ const ProductCard = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-between px-4 pb-4">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between px-6 pb-6">
+          <div className="flex items-center gap-3">
             <UpvoteButton
               productId={id}
               initialCount={upvotes}
@@ -151,8 +157,8 @@ const ProductCard = ({
               onUpvote={onUpvote}
             />
 
-            <div className="flex items-center text-sm text-muted-foreground">
-              <MessageSquare className="h-4 w-4 mr-1.5" />
+            <div className="flex items-center text-sm text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
+              <MessageSquare className="h-3.5 w-3.5 mr-1" />
               <span>{comments}</span>
             </div>
           </div>
@@ -160,10 +166,10 @@ const ProductCard = ({
           <Button
             size={isMobile ? "sm" : "sm"}
             variant="outline"
-            className="flex items-center gap-1.5 text-sm hover:text-brand-orange hover:border-brand-orange"
+            className="flex items-center gap-1.5 text-sm hover:text-primary hover:border-primary/50 bg-primary/5 border-primary/20 rounded-full px-4"
             onClick={onExternalLinkClick}
           >
-            <span>Get it</span>
+            <span>Visit</span>
             <ExternalLink className="h-3.5 w-3.5" />
           </Button>
         </div>

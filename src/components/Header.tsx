@@ -78,9 +78,11 @@ const Header = () => {
             to="/"
             className="flex items-center gap-2 font-semibold text-xl"
           >
-            <div className="bg-brand-orange text-white h-8 w-8 rounded-md flex items-center justify-center">
-              P
-            </div>
+            <img 
+              src="/lovable-uploads/c7b04f46-c43d-4957-b4a1-60a471eef3cc.png" 
+              alt="Notabletools"
+              className="h-8 w-8 rounded-md"
+            />
             <span className="hidden sm:inline">Notabletools</span>
           </Link>
 

@@ -44,17 +44,17 @@ const Sidebar = () => {
   return (
     <aside className="space-y-8 w-full lg:w-80 xl:w-96">
       {/* Trending Topics */}
-      <FadeIn className="rounded-xl border border-border p-5 bg-white">
-        <h3 className="font-medium text-lg mb-4">Trending Topics</h3>
-        <div className="space-y-2">
+      <FadeIn className="rounded-2xl border border-primary/10 p-6 bg-gradient-to-br from-white via-primary/5 to-purple-500/5">
+        <h3 className="font-semibold text-lg mb-5 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Trending Topics</h3>
+        <div className="space-y-1">
           {topics.map((topic, index) => (
             <a
               key={topic}
               href="#"
-              className="flex items-center justify-between py-2 px-3 rounded-md hover:bg-muted transition-colors group"
+              className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primary/10 transition-all duration-200 group border border-transparent hover:border-primary/20"
             >
-              <span>{topic}</span>
-              <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="font-medium text-sm">{topic}</span>
+              <ChevronRight className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200" />
             </a>
           ))}
         </div>
@@ -63,52 +63,59 @@ const Sidebar = () => {
       {/* Newsletter Signup */}
       <FadeIn 
         delay={100} 
-        className="rounded-xl border border-brand-orange/20 p-5 bg-gradient-to-b from-brand-light to-white"
+        className="rounded-2xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 via-white to-purple-500/5 relative overflow-hidden"
       >
-        <div className="flex gap-3 mb-3">
-          <div className="bg-brand-orange/10 text-brand-orange rounded-md h-8 w-8 flex items-center justify-center">
-            <BellRing className="h-4 w-4" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-purple-500/10 opacity-50"></div>
+        <div className="relative z-10">
+          <div className="flex gap-3 mb-4">
+            <div className="bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl h-10 w-10 flex items-center justify-center shadow-lg">
+              <BellRing className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Daily Insights</h3>
+              <p className="text-xs text-muted-foreground">Curated for creators</p>
+            </div>
           </div>
-          <h3 className="font-medium text-lg">Daily Product Digest</h3>
+          <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
+            Discover hand-picked tools and innovations delivered to your inbox every morning.
+          </p>
+          <form onSubmit={handleSubscribe} className="space-y-3">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className="w-full px-4 py-3 rounded-xl border border-primary/20 bg-white/80 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
+              required
+            />
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              icon={<ArrowRight className="h-4 w-4" />}
+              iconPosition="right"
+              fullWidth
+              className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 rounded-xl py-3"
+            >
+              Subscribe
+            </Button>
+          </form>
         </div>
-        <p className="text-sm text-muted-foreground mb-4">
-          Get the most exciting new products in your inbox every day.
-        </p>
-        <form onSubmit={handleSubscribe} className="space-y-2">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-            className="w-full px-3 py-2 rounded-md border border-input bg-white/50 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:border-transparent"
-            required
-          />
-          <Button
-            type="submit"
-            variant="primary"
-            size="sm"
-            icon={<ArrowRight className="h-4 w-4" />}
-            iconPosition="right"
-            fullWidth
-          >
-            Subscribe
-          </Button>
-        </form>
       </FadeIn>
 
       {/* Upcoming Products */}
-      <FadeIn delay={200} className="rounded-xl border border-border p-5 bg-white">
-        <h3 className="font-medium text-lg mb-4">Coming Soon</h3>
+      <FadeIn delay={200} className="rounded-2xl border border-border/50 p-6 bg-white/80 backdrop-blur-sm">
+        <h3 className="font-semibold text-lg mb-5 text-foreground">Coming Soon</h3>
         <div className="space-y-4">
           {upcomingProducts.map((product, index) => (
-            <div key={product.name} className="space-y-1">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium">{product.name}</h4>
-                <span className="text-xs px-2 py-0.5 bg-muted rounded-full text-muted-foreground">
+            <div key={product.name} className="p-4 rounded-xl bg-gradient-to-r from-muted/30 to-primary/5 border border-primary/10 hover:border-primary/20 transition-all duration-200 group">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-medium text-foreground group-hover:text-primary transition-colors">{product.name}</h4>
+                <span className="text-xs px-3 py-1 bg-primary/10 text-primary rounded-full font-medium">
                   {product.launchDate}
                 </span>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {product.description}
               </p>
             </div>

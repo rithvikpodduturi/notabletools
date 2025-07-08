@@ -9,9 +9,11 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 font-semibold text-xl mb-4">
-              <div className="bg-brand-orange text-white h-8 w-8 rounded-md flex items-center justify-center">
-                P
-              </div>
+              <img 
+                src="/lovable-uploads/c7b04f46-c43d-4957-b4a1-60a471eef3cc.png" 
+                alt="Notabletools"
+                className="h-8 w-8 rounded-md"
+              />
               <span>Notabletools</span>
             </Link>
             <p className="text-muted-foreground text-sm">
