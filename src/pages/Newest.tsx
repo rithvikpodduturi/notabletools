@@ -175,7 +175,7 @@ const Newest = () => {
     <div className="min-h-screen flex flex-col pb-16 md:pb-0">
       <Header />
       <main className="flex-grow">        
-        <section className="py-8 md:py-16 bg-muted/30">
+        <section className="pt-24 pb-8 md:pt-28 md:pb-16 bg-muted/30">
           <div className="container-custom">
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="flex-grow">

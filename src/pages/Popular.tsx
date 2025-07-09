@@ -7,6 +7,7 @@ import Sidebar from "@/components/Sidebar";
 import FadeIn from "@/components/animations/FadeIn";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/toaster";
+import { BottomNav } from "@/components/mobile/BottomNav";
 import { CommentType } from "@/components/social/Comment";
 
 // We're reusing the sample data from Index.tsx
@@ -226,10 +227,10 @@ const Popular = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col pb-16 md:pb-0">
       <Header />
-      <main className="flex-grow pt-24 pb-16">
-        <section className="py-8 bg-muted/30">
+      <main className="flex-grow">
+        <section className="pt-24 pb-8 md:pt-28 md:pb-16 bg-muted/30">
           <div className="container-custom">
             <div className="mb-8">
               <h1 className="text-3xl font-bold mb-2">Popular Products</h1>
@@ -280,6 +281,9 @@ const Popular = () => {
         </section>
       </main>
       <Footer />
+      
+      {/* Bottom Navigation - only on mobile */}
+      <BottomNav />
       
       {/* Product detail modal */}
       {selectedProduct && (

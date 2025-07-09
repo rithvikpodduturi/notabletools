@@ -91,8 +91,8 @@ const Topics = () => {
   return (
     <div className="min-h-screen flex flex-col pb-16 md:pb-0">
       <Header />
-      <main className="flex-grow pt-20 md:pt-24">
-        <section className="py-6 md:py-10 border-b">
+      <main className="flex-grow">
+        <section className="pt-24 pb-6 md:pt-28 md:pb-10 border-b">
           <div className="container-custom text-center max-w-3xl mx-auto">
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
               Explore Topics
