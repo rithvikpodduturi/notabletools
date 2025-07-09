@@ -169,13 +169,13 @@ const Header = () => {
       {/* Mobile Menu */}
       <div
         className={cn(
-          "fixed inset-0 top-[60px] z-40 bg-white/95 backdrop-blur-sm md:hidden transition-all duration-300 ease-in-out",
+          "fixed inset-0 top-[60px] z-40 bg-background border-t border-border md:hidden transition-all duration-300 ease-in-out",
           isMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         )}
       >
-        <div className="flex flex-col h-full p-6 pt-8">
+        <div className="flex flex-col h-full p-6 pt-8 bg-background">
           <div className="mb-4">
             <SearchCommand products={sampleProducts} />
           </div>
@@ -268,7 +268,7 @@ const MobileNavLink = ({
 }) => (
   <Link
     to={to}
-    className="py-3 text-lg text-foreground hover:text-brand-orange transition-colors"
+    className="py-3 text-lg text-foreground hover:text-primary transition-colors font-medium"
     onClick={onClick}
   >
     {label}
