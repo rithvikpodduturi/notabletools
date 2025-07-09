@@ -86,17 +86,25 @@ const Header = () => {
             <span className="hidden sm:inline">Notabletools</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            <NavLink to="/" label="Home" />
-            <NavLink to="/popular" label="Popular" />
-            <NavLink to="/newest" label="Newest" />
-            <NavLink to="/topics" label="Topics" hasDropdown />
-          </nav>
+          {/* Desktop Navigation - Centered */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
+            <nav className="bg-muted/50 backdrop-blur-sm rounded-full px-6 py-2 border border-border/50">
+              <div className="flex items-center space-x-6">
+                <NavLink to="/" label="Home" />
+                <NavLink to="/popular" label="Popular" />
+                <NavLink to="/newest" label="Newest" />
+                <NavLink to="/topics" label="Topics" hasDropdown />
+              </div>
+            </nav>
+          </div>
 
           {/* Desktop Right Section */}
-          <div className="hidden md:flex items-center space-x-2">
+          <div className="hidden md:flex items-center space-x-3">
             <SearchCommand products={sampleProducts} />
+            
+            <Button variant="outline" size="sm" asChild className="rounded-full">
+              <Link to="/contact">Contact Us</Link>
+            </Button>
             
             {isLoggedIn ? (
               <>
@@ -104,7 +112,7 @@ const Header = () => {
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="flex items-center rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange">
+                    <button className="flex items-center rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                       <Avatar className="h-9 w-9">
                         <AvatarImage src={simulatedUser.avatar} alt={simulatedUser.name} />
                         <AvatarFallback>{simulatedUser.name.charAt(0)}</AvatarFallback>
@@ -141,10 +149,10 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="ghost" size="sm" asChild className="rounded-full">
                   <Link to="/login">Sign In</Link>
                 </Button>
-                <Button variant="primary" size="sm" asChild>
+                <Button variant="primary" size="sm" asChild className="rounded-full">
                   <Link to="/login?signup=true">Sign Up</Link>
                 </Button>
               </>
@@ -249,10 +257,10 @@ const NavLink = ({
 }) => (
   <Link
     to={to}
-    className="px-3 py-2 rounded-md text-foreground hover:bg-muted transition-colors flex items-center"
+    className="px-4 py-2 rounded-full text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-muted transition-all duration-200 flex items-center"
   >
     {label}
-    {hasDropdown && <ChevronDown className="ml-1 h-4 w-4" />}
+    {hasDropdown && <ChevronDown className="ml-1 h-3 w-3" />}
   </Link>
 );
 
