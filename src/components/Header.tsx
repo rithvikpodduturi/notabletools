@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ChevronDown, Settings, LogOut, User } from "lucide-react";
+import { Menu, X, ChevronDown, Settings, LogOut, User, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "./common/Button";
 import { NotificationBell } from "./user/NotificationCenter";
@@ -88,7 +88,7 @@ const Header = () => {
 
           {/* Desktop Navigation - Centered */}
           <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
-            <nav className="bg-muted/50 backdrop-blur-sm rounded-full px-6 py-2 border border-border/50">
+            <nav className="bg-slate-800/90 backdrop-blur-sm rounded-full px-6 py-2 border border-slate-700/50">
               <div className="flex items-center space-x-6">
                 <NavLink to="/" label="Home" />
                 <NavLink to="/popular" label="Popular" />
@@ -100,11 +100,12 @@ const Header = () => {
 
           {/* Desktop Right Section */}
           <div className="hidden md:flex items-center space-x-3">
-            <SearchCommand products={sampleProducts} />
-            
-            <Button variant="outline" size="sm" asChild className="rounded-full">
-              <Link to="/contact">Contact Us</Link>
-            </Button>
+            <button
+              onClick={() => {/* Search command logic */}}
+              className="inline-flex items-center justify-center rounded-md border border-input bg-background p-2 text-muted-foreground shadow-sm hover:bg-accent hover:text-accent-foreground"
+            >
+              <Search className="h-5 w-5" />
+            </button>
             
             {isLoggedIn ? (
               <>
@@ -148,14 +149,9 @@ const Header = () => {
                 </DropdownMenu>
               </>
             ) : (
-              <>
-                <Button variant="ghost" size="sm" asChild className="rounded-full">
-                  <Link to="/login">Sign In</Link>
-                </Button>
-                <Button variant="primary" size="sm" asChild className="rounded-full">
-                  <Link to="/login?signup=true">Sign Up</Link>
-                </Button>
-              </>
+              <Button variant="primary" size="sm" asChild className="rounded-full">
+                <Link to="/login">Get Started</Link>
+              </Button>
             )}
           </div>
 
@@ -225,18 +221,11 @@ const Header = () => {
                 </Button>
               </>
             ) : (
-              <>
-                <Button variant="outline" fullWidth asChild>
-                  <Link to="/login" onClick={toggleMenu}>
-                    Sign In
-                  </Link>
-                </Button>
-                <Button variant="primary" fullWidth asChild>
-                  <Link to="/login?signup=true" onClick={toggleMenu}>
-                    Sign Up
-                  </Link>
-                </Button>
-              </>
+              <Button variant="primary" fullWidth asChild>
+                <Link to="/login" onClick={toggleMenu}>
+                  Get Started
+                </Link>
+              </Button>
             )}
           </div>
         </div>
@@ -257,7 +246,7 @@ const NavLink = ({
 }) => (
   <Link
     to={to}
-    className="px-4 py-2 rounded-full text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-muted transition-all duration-200 flex items-center"
+    className="px-4 py-2 rounded-full text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200 flex items-center"
   >
     {label}
     {hasDropdown && <ChevronDown className="ml-1 h-3 w-3" />}
